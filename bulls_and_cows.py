@@ -4,10 +4,14 @@
 # author: Marek Pošmura
 # email: m.posmura@seznam.cz
 
-from random import sample, choice, seed
+from random import sample, choice
 import time
 import os
 import csv
+
+from constants import RED, GREEN, YELLOW, RESET, LINE
+  
+    ### BULLS AND COWS GAME ###
 
 # DEFAULT VARIABLES
 login = ""
@@ -15,12 +19,7 @@ difficulty = 4
 secret_num = ""
 scoreboard_name = f"scoreboard_{difficulty}.csv"
 
-# TEXT FORMATTING
-line = 79 * "-"
-red = "\033[31m"
-green = "\033[32m"
-yellow = "\033[33m"
-reset = "\033[0m"
+    ### GAME FUNCTIONS ###
 
 # START THE GAME
 def game():
@@ -38,13 +37,13 @@ def show_menu():
   main_menu = [
   "1. Start game",
   "2. Rules of the Game",
-  f"3. Change difficulty: {yellow}{difficulty} digits{reset}",
-  f"4. Change player: {yellow}{show_10_char(login)}{reset}",
+  f"3. Change difficulty: {YELLOW}{difficulty} digits{RESET}",
+  f"4. Change player: {YELLOW}{show_10_char(login)}{RESET}",
   "5. Scoreboard",
   "6. Exit game"
   ]
-  print(f"Hello {show_10_char(login)}!", line, "Let's play Bulls and Cows!", line, sep="\n")
-  print ("\n".join(main_menu), line, sep="\n")
+  print(f"Hello {show_10_char(login)}!", LINE, "Let's play Bulls and Cows!", LINE, sep="\n")
+  print ("\n".join(main_menu), LINE, sep="\n")
 
 # MAIN MENU SELECTION
 def choose_from_main_menu():
@@ -57,7 +56,7 @@ def choose_from_main_menu():
     menu = input("Select an option from the menu: ")
     clear_terminal()
     if menu not in map(str, range(1, 7)):
-      print(f"{red}You didn't choose a number from the menu, try again.{reset}")
+      print(f"{RED}You didn't choose a number from the menu, try again.{RESET}")
       enter_to_continue()
       continue
     elif menu == "1":
@@ -89,15 +88,15 @@ def show_rules_of_game():
   """
   bulls_and_cows = f"""
 RULES OF THE GAME:
-The goal of the game is to {yellow}guess a secret code{reset} (4-digit number in normal difficulty).
+The goal of the game is to {YELLOW}guess a secret code{RESET} (4-digit number in normal difficulty).
 
-The code consists of digits (0–9) with{yellow} no repeated numbers{reset}, and the secret
-code {yellow}cannot start with zero{reset}.
+The code consists of digits (0–9) with{YELLOW} no repeated numbers{RESET}, and the secret
+code {YELLOW}cannot start with zero{RESET}.
 
 After your guess, the game will provide you with feedback:
 
-    - {yellow}Number of Bulls:  Correct digit in the correct position.{reset}
-    - {yellow}Number of Cows:   Correct digit in the wrong position.{reset}
+    - {YELLOW}Number of Bulls:  Correct digit in the correct position.{RESET}
+    - {YELLOW}Number of Cows:   Correct digit in the wrong position.{RESET}
 
 If you correctly guess the entire secret code (all Bulls), you win the game!
 
@@ -124,10 +123,10 @@ def set_difficulty():
         scoreboard_name = f"scoreboard_{difficulty}.csv"
         break
       else:
-        print(f"{red}You didn't enter a length of code between 3 and 6. Please try again.{reset}")
+        print(f"{RED}You didn't enter a length of code between 3 and 6. Please try again.{RESET}")
         continue
     except ValueError:
-        print(f"{red}Invalid input. Please enter a number between 3 and 6:{reset}")
+        print(f"{RED}Invalid input. Please enter a number between 3 and 6:{RESET}")
   return difficulty
 
 # 3.1 DISPLAY DIFFICULTY MENU
@@ -136,10 +135,10 @@ def show_difficulty_menu():
   Shows available difficulty levels to the player.
   """
   difficulty_menu = [
-  f"Easy difficulty:       {yellow}3 digits{reset}",
-  f"Normal difficulty:     {yellow}4 digits{reset}",
-  f"Hard difficulty:       {yellow}5 digits{reset}",
-  f"Nightmare difficulty:  {yellow}6 digits{reset}"
+  f"Easy difficulty:       {YELLOW}3 digits{RESET}",
+  f"Normal difficulty:     {YELLOW}4 digits{RESET}",
+  f"Hard difficulty:       {YELLOW}5 digits{RESET}",
+  f"Nightmare difficulty:  {YELLOW}6 digits{RESET}"
   ]
   return print(f"Choose your difficulty level:", "\n".join(difficulty_menu), sep="\n")
 
@@ -149,7 +148,7 @@ def get_user_name():
   Displays a request for the player to enter their name.
   """
   global login
-  login = input("Type your name: ")
+  login = input("Type your name: ").strip()
   return login
 
 # 5. MAIN MENU OPTION - DISPLAY SCOREBOARD
@@ -158,10 +157,10 @@ def show_scoreboard_menu():
   Displays the scoreboard and allows the user to choose difficulty.
   """
   scoreboard_menu = [
-  f"Easy difficulty:       {yellow}3 digits{reset}",
-  f"Normal difficulty:     {yellow}4 digits{reset}",
-  f"Hard difficulty:       {yellow}5 digits{reset}",
-  f"Nightmare difficulty:  {yellow}6 digits{reset}"
+  f"Easy difficulty:       {YELLOW}3 digits{RESET}",
+  f"Normal difficulty:     {YELLOW}4 digits{RESET}",
+  f"Hard difficulty:       {YELLOW}5 digits{RESET}",
+  f"Nightmare difficulty:  {YELLOW}6 digits{RESET}"
   ]
   print(f"Scoreboard:")
   for index, item in enumerate(scoreboard_menu, start=1):
@@ -177,10 +176,10 @@ def show_scoreboard_menu():
         display_results(sorted_results)
         break
       else:
-        print(f"{red}You didn't chose number in the menu, try again.{reset}")
+        print(f"{RED}You didn't chose number in the menu, try again.{RESET}")
         continue
     except ValueError:
-        print(f"{red}Invalid input. Please enter a number between 1 and 4:{reset}")
+        print(f"{RED}Invalid input. Please enter a number between 1 and 4:{RESET}")
 
 # 6. OPTION FROM MAIN MENU - EXIT GAME
 def exit_game():
@@ -199,15 +198,15 @@ def play_game():
   attempts = 0 # ATTEMPT COUNTER
   running_game = True
   start_time = time.perf_counter() # START TIME COUNTER
-  print(f"I've generated random {yellow}{difficulty}-digit{reset} number for you.",
-        f"All {yellow}digits are unique{reset} and the number {yellow}can't start with zero{reset}.",
+  print(f"I've generated random {YELLOW}{difficulty}-digit{RESET} number for you.",
+        f"All {YELLOW}digits are unique{RESET} and the number {YELLOW}can't start with zero{RESET}.",
         "Can you crack the secret code?",
-        f"If you want to give up, type {yellow}'Q'{reset}.", line, sep="\n")
+        f"If you want to give up, type {YELLOW}'Q'{RESET}.", LINE, sep="\n")
   while running_game:
     guess_num = input(f"Enter a {difficulty}-digit number: ")
     attempts += 1
     print(f">>> {guess_num}")
-    print(f"{red}{secret_num} SMAZAT{reset}") ############################################# pro testování
+    # print(f"{RED}{secret_num} SMAZAT{RESET}") # FOR TESTING PURPOSES
 
     # EXIT GAME
     if guess_num.lower().strip() == "q":
@@ -219,23 +218,23 @@ def play_game():
       end_time = time.perf_counter()  # STOP TIME COUNTER
       elapsed_time = round(end_time - start_time, 1)  # CALCULATE TOTAL TIME
       save_result(scoreboard_name, show_10_char(login), attempts, elapsed_time) # SAVE RESULT TO SCOREBOARD
-      print(f"{green}Well done! You found the correct number\nin {attempts} attempts and {elapsed_time} seconds!{reset}")
+      print(f"{GREEN}Well done! You found the correct number\nin {attempts} attempts and {elapsed_time} seconds!{RESET}")
       enter_to_continue()
       running_game = False
 
-    # INPUT VALIDATION55
+    # INPUT VALIDATION
     else:
       error_message = validate_guess(guess_num)
       if error_message:
-        print(f"{red}{error_message}{reset}", line, sep="\n")
+        print(f"{RED}{error_message}{RESET}", LINE, sep="\n")
         continue
 
     # GAME CONTINUES IF INPUT IS VALID
-    show_progres(guess_num)
-    print(line)
+    show_progress(guess_num)
+    print(LINE)
 
 # GENERATE RANDOM NUMBER BASED ON GAME RULES
-def generate_random_number(number_of_digits):
+def generate_random_number(number_of_digits: int) -> str:
   """
   Generates a random number of given length with unique digits.
   The number cannot start with zero.
@@ -252,7 +251,7 @@ def give_up():
   """
   Displays the correct number and ends the game session.
   """
-  print(f"The number you were looking for was {yellow}{secret_num}{reset}. Better luck next time.")
+  print(f"The number you were looking for was {YELLOW}{secret_num}{RESET}. Better luck next time.")
   enter_to_continue()
 
 # INPUT VALIDATION DURING THE GAME
@@ -265,13 +264,13 @@ def validate_guess(guess):
   if guess.startswith("0"):
     return "The number can't start with zero."
   if len(guess) != difficulty:
-    return "You have entered the wrong number of digits."
+    return "You have entered the wrong amount of digits."
   if not check_unique_characters(guess):
     return "The number can't contain duplicate digits."
   return None
 
 # DISPLAY PROGRESS DURING THE GAME
-def show_progres(sec_num):
+def show_progress(sec_num):
   """
   Displays the current progress in terms of bulls and cows.
   """
@@ -336,7 +335,8 @@ def check_unique_characters(string):
   """
   return len(string) == len(set(string))
 
-############################ dodělat modul, např scoreboard a importovat vzorce z něj....alias sb
+
+  #### CSV SCOREBOARD FUNCTIONS ####
 
 # SAVE RESULTS TO CSV FILE
 def save_result(filename, name, attempts, time):
@@ -357,20 +357,20 @@ def load_and_sort_results(filename):
   """
   results = []
   if not os.path.exists(filename):
-    print(f"{red}There are no results saved in this table yet.{reset}")
+    print(f"{RED}There are no results saved in this table yet.{RESET}")
     return results
   try:
     with open(filename, mode='r') as file:
       reader = csv.reader(file)
       header = next(reader)
       if header != ["Name", "Attempts", "Time"]:
-        print(f"{red}Invalid file format. Expected header: Name, Attempts, Time{reset}")
+        print(f"{RED}Invalid file format. Expected header: Name, Attempts, Time{RESET}")
         return results
       for row in reader:
         name, attempts, time = row
-        results.append([name, int(attempts), time])
+        results.append([name, int(attempts), float(time)])
   except Exception as e:
-    print(f"{red}Error loading results: {e}{reset}")
+    print(f"{RED}Error loading results: {e}{RESET}")
 
   return sorted(results, key=lambda x: x[2]) # SORTED BY TIME
 
@@ -382,7 +382,7 @@ def display_results(results):
   print(f"{'Rank':<5}{'Name':<15}{'Attempts':<10}{'Time(sec)':<10}")
   print("-" * 40)
   for rank, (name, attempts, time) in enumerate(results, start=1):
-    print(f"{rank:<5}{name:<15}{attempts:<10}{time:<10}")
+    print(f"{rank:<5}{name:<15}{attempts:>7}{time:>10}")
   print()
   enter_to_continue()
 
